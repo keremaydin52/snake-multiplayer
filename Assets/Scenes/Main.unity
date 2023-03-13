@@ -202,10 +202,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f42b95fc008574657a14b6ba9875dbc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  upKey: 119
-  downKey: 115
-  leftKey: 97
-  rightKey: 100
+  inputKeys:
+    upKey: 0
+    downKey: 0
+    leftKey: 0
+    rightKey: 0
 --- !u!114 &209773881
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -219,6 +220,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startPosition: {x: 6, y: 6}
+  inputKeys:
+    upKey: 119
+    downKey: 115
+    leftKey: 97
+    rightKey: 100
   inputController: {fileID: 209773880}
 --- !u!4 &209773882
 Transform:
@@ -493,10 +499,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f42b95fc008574657a14b6ba9875dbc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  upKey: 273
-  downKey: 274
-  leftKey: 276
-  rightKey: 275
+  inputKeys:
+    upKey: 0
+    downKey: 0
+    leftKey: 0
+    rightKey: 0
 --- !u!114 &279728890
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -510,6 +517,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startPosition: {x: 5, y: 5}
+  inputKeys:
+    upKey: 273
+    downKey: 274
+    leftKey: 276
+    rightKey: 275
   inputController: {fileID: 279728889}
 --- !u!4 &279728891
 Transform:

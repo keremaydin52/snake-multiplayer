@@ -1,14 +1,11 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class InputController : MonoBehaviour
 {
-    public KeyCode upKey;
-    public KeyCode downKey;
-    public KeyCode leftKey;
-    public KeyCode rightKey;
+    [HideInInspector]
+    public InputKeys inputKeys;
     
     private LinkedList<Vector2Int> _queue;
     private Vector2Int _lastDirection;
@@ -27,23 +24,27 @@ public class InputController : MonoBehaviour
     {
         Reset();
     }
+
+    public void Initialize(InputKeys inputs)
+    {
+        inputKeys = inputs;
+    }
     
     void Update()
     {
-        // Input controls
-        if (Input.GetKeyDown(upKey) && LastDirection != Vector2.down)
+        if (Input.GetKeyDown(inputKeys.upKey) && LastDirection != Vector2.down)
         {
             Enqueue(Vector2Int.up);
         }
-        else if (Input.GetKeyDown(downKey) && LastDirection != Vector2.up)
+        else if (Input.GetKeyDown(inputKeys.downKey) && LastDirection != Vector2.up)
         {
             Enqueue(Vector2Int.down);
         }
-        else if (Input.GetKeyDown(leftKey) && LastDirection != Vector2.right)
+        else if (Input.GetKeyDown(inputKeys.leftKey) && LastDirection != Vector2.right)
         {
             Enqueue(Vector2Int.left);
         }
-        else if (Input.GetKeyDown(rightKey) && LastDirection != Vector2.left)
+        else if (Input.GetKeyDown(inputKeys.rightKey) && LastDirection != Vector2.left)
         {
             Enqueue(Vector2Int.right);
         }
@@ -70,4 +71,13 @@ public class InputController : MonoBehaviour
         _queue = new LinkedList<Vector2Int>();
         Enqueue(Vector2Int.up);
     }
+}
+
+[Serializable]
+public struct InputKeys
+{
+    public KeyCode upKey;
+    public KeyCode downKey;
+    public KeyCode leftKey;
+    public KeyCode rightKey;
 }

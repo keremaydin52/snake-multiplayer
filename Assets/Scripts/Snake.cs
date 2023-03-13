@@ -8,8 +8,10 @@ using UnityEngine;
 public class Snake : MonoBehaviour, IEnumerable<Vector2Int>
 {
     public Vector2Int startPosition;
+    public InputKeys inputKeys;
     
-    [HideInInspector] public InputController inputController;
+    [HideInInspector] 
+    public InputController inputController;
     
     private Board _board;
     private LinkedList<Vector2Int> _body;
@@ -24,17 +26,14 @@ public class Snake : MonoBehaviour, IEnumerable<Vector2Int>
         _board = TrackManager.Instance.board;
         _body = new LinkedList<Vector2Int>();
         _bulges = new HashSet<Vector2Int>();
+        
         inputController.GetComponent<InputController>();
+        inputController.Initialize(inputKeys);
     }
 
     public void Initialize()
     {
-        foreach (var p in _body)
-        {
-            _board[p].Content = TileContent.Empty;
-        }
-
-        _body.Clear();
+        RemoveSnake();
 
         for (int i = 0; i < 2; i++)
         {
@@ -43,6 +42,16 @@ public class Snake : MonoBehaviour, IEnumerable<Vector2Int>
         }
 
         UpdateSnakeState();
+    }
+
+    public void RemoveSnake()
+    {
+        foreach (var p in _body)
+        {
+            _board[p].Content = TileContent.Empty;
+        }
+
+        _body.Clear();
     }
 
     public void Move(Vector2Int direction, bool extend)

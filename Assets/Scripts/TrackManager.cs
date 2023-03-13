@@ -15,6 +15,7 @@ public class TrackManager : Singleton<TrackManager>
     private Vector2Int _applePosition;
     private Vector2Int _bonusPosition;
     private bool _isMoving;
+    private List<Snake> _aliveSnakes = new List<Snake>();
 
     void Update()
     {
@@ -24,7 +25,7 @@ public class TrackManager : Singleton<TrackManager>
         while (_time > gameSpeed)
         {
             _time -= gameSpeed;
-            foreach (var snake in snakes)
+            foreach (var snake in _aliveSnakes)
             {
                 UpdateGameState(snake);
             }
@@ -33,7 +34,10 @@ public class TrackManager : Singleton<TrackManager>
 
     public void Begin()
     {
-        foreach (var snake in snakes)
+        _aliveSnakes.Clear();
+        _aliveSnakes = snakes.ToList();
+        
+        foreach (var snake in _aliveSnakes)
         {
             snake.inputController.Reset();
             snake.Initialize();
@@ -46,10 +50,16 @@ public class TrackManager : Singleton<TrackManager>
         _isMoving = true;
     }
 
-    void Stop()
+    void Stop(Snake snake)
     {
-        _isMoving = false;
-        GameManager.Instance.SwitchState("GameOver");
+        snake.RemoveSnake();
+        _aliveSnakes.Remove(snake);
+        
+        if (_aliveSnakes.Count == 0)
+        {
+            _isMoving = false;
+            GameManager.Instance.SwitchState("GameOver");
+        }
     }
 
     private void UpdateGameState(Snake snake)
@@ -58,7 +68,6 @@ public class TrackManager : Singleton<TrackManager>
         {
             var dir = snake.inputController.NextDirection();
 
-            // New head position
             var head = snake.NextHeadPosition(dir);
 
             var x = head.x;
@@ -66,7 +75,7 @@ public class TrackManager : Singleton<TrackManager>
 
             if (snake.WithoutTail.Contains(head))
             {
-                Stop();
+                Stop(snake);
                 return;
             }
 
@@ -84,7 +93,7 @@ public class TrackManager : Singleton<TrackManager>
             }
             else
             {
-                Stop();
+                Stop(snake);
             }
         }
     }
