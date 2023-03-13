@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,18 +5,16 @@ using UnityEngine.Serialization;
 
 public class TrackManager : Singleton<TrackManager>
 {
-    // Variable used for game update delay calculations
-    private float _time;
-    private Snake _snake;
-    private Vector2Int _applePosition;
-    private Vector2Int _bonusPosition;
-    private InputController _inputController;
-    private bool _isMoving;
-
     [Range(0f, 3f)]
     public float gameSpeed;
-
     public Board board;
+
+    [SerializeField] private List<Snake> snakes;
+
+    private float _time;
+    private Vector2Int _applePosition;
+    private Vector2Int _bonusPosition;
+    private bool _isMoving;
 
     void Update()
     {
@@ -28,24 +24,25 @@ public class TrackManager : Singleton<TrackManager>
         while (_time > gameSpeed)
         {
             _time -= gameSpeed;
-            UpdateGameState();
+            foreach (var snake in snakes)
+            {
+                UpdateGameState(snake);
+            }
         }
     }
 
     public void Begin()
     {
-        _inputController = GetComponent<InputController>();
-        _inputController.Reset();
-        
-        _snake = new Snake(board);
-        _snake.Reset();
+        foreach (var snake in snakes)
+        {
+            snake.inputController.Reset();
+            snake.Reset();
+        }
 
         board.Reset();
-        
         PlantAnApple();
         
         _time = 0;
-        
         _isMoving = true;
     }
 
@@ -55,19 +52,19 @@ public class TrackManager : Singleton<TrackManager>
         GameManager.Instance.SwitchState("GameOver");
     }
 
-    private void UpdateGameState()
+    private void UpdateGameState(Snake snake)
     {
-        if (_snake != null)
+        if (snake != null)
         {
-            var dir = _inputController.NextDirection();
+            var dir = snake.inputController.NextDirection();
 
             // New head position
-            var head = _snake.NextHeadPosition(dir);
+            var head = snake.NextHeadPosition(dir);
 
             var x = head.x;
             var y = head.y;
 
-            if (_snake.WithoutTail.Contains(head))
+            if (snake.WithoutTail.Contains(head))
             {
                 Stop();
                 return;
@@ -77,12 +74,12 @@ public class TrackManager : Singleton<TrackManager>
             {
                 if (head == _applePosition)
                 {
-                    _snake.Move(dir, true);
+                    snake.Move(dir, true);
                     PlantAnApple();
                 }
                 else
                 {
-                    _snake.Move(dir, false);
+                    snake.Move(dir, false);
                 }
             }
             else

@@ -1,29 +1,29 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public class Snake : IEnumerable<Vector2Int>
+[Serializable]
+public class Snake : MonoBehaviour, IEnumerable<Vector2Int>
 {
+    [HideInInspector] public InputController inputController;
+    
+    private Board _board;
     private LinkedList<Vector2Int> _body;
     private HashSet<Vector2Int> _bulges;
-    private Board _board;
 
-    public Vector2Int Head => _body.Last.Value;
+    private Vector2Int Head => _body.Last.Value;
+    
+    public IEnumerable<Vector2Int> WithoutTail => this.Where((p) => p != _body.First.Value);
 
-    public IEnumerable<Vector2Int> WithoutTail
+    private void Start()
     {
-        get
-        {
-            return this.Where((p) => { return p != _body.First.Value; });
-        }
-    }
-
-    public Snake(Board board)
-    {
-        _board = board;
+        _board = TrackManager.Instance.board;
         _body = new LinkedList<Vector2Int>();
         _bulges = new HashSet<Vector2Int>();
+        inputController.GetComponent<InputController>();
         Reset();
     }
 
@@ -74,22 +74,7 @@ public class Snake : IEnumerable<Vector2Int>
         var tile = _board[headPosition];
         tile.Content = TileContent.SnakeHead;
 
-        if (nextPosition.y > headPosition.y)
-        {
-            tile.ZRotation = 0;
-        }
-        else if (nextPosition.y < headPosition.y)
-        {
-            tile.ZRotation = 180;
-        }
-        else if (nextPosition.x > headPosition.x)
-        {
-            tile.ZRotation = 90;
-        }
-        else if (nextPosition.x < headPosition.x)
-        {
-            tile.ZRotation = -90;
-        }
+        AssignRotation(tile, nextPosition, headPosition);
 
         // Handle middle section
         var previous = _body.Last;
@@ -102,7 +87,6 @@ public class Snake : IEnumerable<Vector2Int>
             {
                 if (_bulges.Contains(current.Value))
                 {
-                    //tile.Content = TileContent.SnakeBulge;
                     tile.Content = TileContent.SnakeBody;
                 }
                 else
@@ -115,7 +99,6 @@ public class Snake : IEnumerable<Vector2Int>
             {
                 if (_bulges.Contains(current.Value))
                 {
-                    //tile.Content = TileContent.SnakeBulge;
                     tile.Content = TileContent.SnakeBody;
                 }
                 else
@@ -128,12 +111,10 @@ public class Snake : IEnumerable<Vector2Int>
             {
                 if (_bulges.Contains(current.Value))
                 {
-                    //tile.Content = TileContent.SnakesLBulged;
                     tile.Content = TileContent.SnakeBody;
                 }
                 else
                 {
-                    //tile.Content = TileContent.SnakesL;
                     tile.Content = TileContent.SnakeBody;
                 }
                 if ((previous.Value.x > current.Value.x && next.Value.y < current.Value.y) || (next.Value.x > current.Value.x && previous.Value.y < current.Value.y))
@@ -166,22 +147,26 @@ public class Snake : IEnumerable<Vector2Int>
         var previousPosition = _body.First.Next.Value;
 
         tile = _board[tailPosition];
-        //tile.Content = TileContent.SnakeTail;
         tile.Content = TileContent.SnakeBody;
 
-        if (previousPosition.y > tailPosition.y)
+        AssignRotation(tile, previousPosition, tailPosition);
+    }
+
+    void AssignRotation(Tile tile, Vector2Int previousPosition, Vector2Int nextPosition)
+    {
+        if (previousPosition.y > nextPosition.y)
         {
             tile.ZRotation = 0;
         }
-        else if (previousPosition.y < tailPosition.y)
+        else if (previousPosition.y < nextPosition.y)
         {
             tile.ZRotation = 180;
         }
-        else if (previousPosition.x > tailPosition.x)
+        else if (previousPosition.x > nextPosition.x)
         {
             tile.ZRotation = 90;
         }
-        else if (previousPosition.x < tailPosition.x)
+        else if (previousPosition.x < nextPosition.x)
         {
             tile.ZRotation = -90;
         }
