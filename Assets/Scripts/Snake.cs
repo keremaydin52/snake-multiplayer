@@ -17,6 +17,7 @@ public class Snake : MonoBehaviour, IEnumerable<Vector2Int>
     private LinkedList<Vector2Int> _body;
     private HashSet<Vector2Int> _bulges;
 
+    public LinkedList<Vector2Int> Body => _body;
     private Vector2Int Head => _body.Last.Value;
     
     public IEnumerable<Vector2Int> WithoutTail => this.Where((p) => p != _body.First.Value);
@@ -35,7 +36,7 @@ public class Snake : MonoBehaviour, IEnumerable<Vector2Int>
     {
         RemoveSnake();
 
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 4; i++)
         {
             var position = new Vector2Int(startPosition.x, startPosition.y - i);
             _body.AddLast(position);

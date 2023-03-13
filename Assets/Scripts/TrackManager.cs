@@ -73,10 +73,21 @@ public class TrackManager : Singleton<TrackManager>
             var x = head.x;
             var y = head.y;
 
+            // Check if snake collides with itself
             if (snake.WithoutTail.Contains(head))
             {
                 Stop(snake);
                 return;
+            }
+
+            // Check if snake collides with another snake
+            foreach (var sn in _aliveSnakes)
+            {
+                if (sn.Body.Contains(head))
+                {
+                    Stop(snake);
+                    return;
+                }
             }
 
             if (x >= 0 && x < board.columns && y >= 0 && y < board.rows)

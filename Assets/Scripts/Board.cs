@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +11,7 @@ public class Board : MonoBehaviour, IEnumerable<Tile>
     public int columns = 15;
     public int rows = 10;
     
-    public IEnumerable<Vector2Int> Positions
+    private IEnumerable<Vector2Int> Positions
     {
         get
         {
