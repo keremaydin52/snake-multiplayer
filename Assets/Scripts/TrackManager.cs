@@ -36,7 +36,7 @@ public class TrackManager : Singleton<TrackManager>
         foreach (var snake in snakes)
         {
             snake.inputController.Reset();
-            snake.Reset();
+            snake.Initialize();
         }
 
         board.Reset();

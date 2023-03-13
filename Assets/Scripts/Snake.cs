@@ -3,11 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 [Serializable]
 public class Snake : MonoBehaviour, IEnumerable<Vector2Int>
 {
+    public Vector2Int startPosition;
+    
     [HideInInspector] public InputController inputController;
     
     private Board _board;
@@ -24,10 +25,9 @@ public class Snake : MonoBehaviour, IEnumerable<Vector2Int>
         _body = new LinkedList<Vector2Int>();
         _bulges = new HashSet<Vector2Int>();
         inputController.GetComponent<InputController>();
-        Reset();
     }
 
-    public void Reset()
+    public void Initialize()
     {
         foreach (var p in _body)
         {
@@ -36,10 +36,9 @@ public class Snake : MonoBehaviour, IEnumerable<Vector2Int>
 
         _body.Clear();
 
-        var start = new Vector2Int(5, 5);
         for (int i = 0; i < 2; i++)
         {
-            var position = new Vector2Int(start.x, start.y - i);
+            var position = new Vector2Int(startPosition.x, startPosition.y - i);
             _body.AddLast(position);
         }
 

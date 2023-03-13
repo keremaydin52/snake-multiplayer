@@ -10,7 +10,6 @@ public class Tile : MonoBehaviour
     public Sprite SnakeHead;
     public Sprite SnakeBody;
     private Image image;
-    private Sprite lastUsedImage;
     
     private RectTransform _rectTransform;
     private TileContent _content;
@@ -49,7 +48,6 @@ public class Tile : MonoBehaviour
                     image.sprite = SnakeBody;
                     break;
             }
-            lastUsedImage = image.sprite;
         }
     }
 

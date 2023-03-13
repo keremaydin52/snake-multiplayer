@@ -16,8 +16,7 @@ public class Board : MonoBehaviour, IEnumerable<Tile>
     {
         get
         {
-            int x = 0;
-            int y = 0;
+            int x = 0, y = 0;
 
             for (int i = 0; i < rows; i++)
             {

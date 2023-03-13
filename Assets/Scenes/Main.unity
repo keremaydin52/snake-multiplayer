@@ -218,6 +218,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f60e2418533a428f8c859218644bbfb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startPosition: {x: 6, y: 6}
   inputController: {fileID: 209773880}
 --- !u!4 &209773882
 Transform:
@@ -508,6 +509,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f60e2418533a428f8c859218644bbfb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startPosition: {x: 5, y: 5}
   inputController: {fileID: 279728889}
 --- !u!4 &279728891
 Transform:
